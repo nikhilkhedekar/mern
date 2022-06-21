@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 app.use(cors())
 
-mongoose.connect('mongodb+srv://Dhungel:Dhungel@awsdhungel.oevqe.mongodb.net/AWSDhungel?retryWrites=true&w=majority').then(res => {
+mongoose.connect('').then(res => {
     console.log("mongoRes", res)
 })
 
