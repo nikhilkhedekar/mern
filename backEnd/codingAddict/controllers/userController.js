@@ -1,11 +1,11 @@
 const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 // const CustomError = require('../errors');
-// const {
-//   createTokenUser,
-//   attachCookiesToResponse,
-//   checkPermissions,
-// } = require('../utils');
+const {
+  createTokenUser,
+  attachCookiesToResponse,
+  checkPermissions,
+} = require('../utils/index');
 
 const getAllUsers = async (req, res) => {
     const users = await User.find({ role: 'user' }).select('-password');//select hides password
@@ -19,11 +19,12 @@ const getSingleUser = async (req, res) => {
         throw new Error("Error")
         // throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
     }
-    //   checkPermissions(req.user, user._id);
+      checkPermissions(req.user, user._id);
     res.status(StatusCodes.OK).json({ user });
 };
 
 const showCurrentUser = async (req, res) => {
+    console.log("showCurrentUser", req);
     res.status(StatusCodes.OK).json({ user: req.user });
 };
 // update user with user.save()
@@ -40,11 +41,10 @@ const updateUser = async (req, res) => {
 
     await user.save();
 
-    //   const tokenUser = createTokenUser(user);
-    //   attachCookiesToResponse({ res, user: tokenUser });
+      const tokenUser = createTokenUser(user);
+      attachCookiesToResponse({ res, user: tokenUser });
     res.status(StatusCodes.OK).json({
-        user,
-        //user: tokenUser 
+        user: tokenUser 
     });
 };
 const updateUserPassword = async (req, res) => {

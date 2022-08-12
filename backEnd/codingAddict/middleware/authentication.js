@@ -1,52 +1,55 @@
 // const CustomError = require('../errors');
-// const { isTokenValid } = require('../utils');
-// const Token = require('../models/Token');
-// const { attachCookiesToResponse } = require('../utils');
-// const authenticateUser = async (req, res, next) => {
-//   const { refreshToken, accessToken } = req.signedCookies;
+const { isTokenValid, attachCookiesToResponse } = require('../utils/index');
+const Token = require('../models/Token');
 
-//   try {
-//     if (accessToken) {
-//       const payload = isTokenValid(accessToken);
-//       req.user = payload.user;
-//       return next();
-//     }
-//     const payload = isTokenValid(refreshToken);
+const authenticateUser = async (req, res, next) => {
+  const { refreshToken, accessToken } = req.signedCookies;
 
-//     const existingToken = await Token.findOne({
-//       user: payload.user.userId,
-//       refreshToken: payload.refreshToken,
-//     });
+  try {
+    if (accessToken) {
+      const payload = isTokenValid(accessToken);
+      req.user = payload.user;
+      return next();
+    }
+    const payload = isTokenValid(refreshToken);
 
-//     if (!existingToken || !existingToken?.isValid) {
-//       throw new CustomError.UnauthenticatedError('Authentication Invalid');
-//     }
+    const existingToken = await Token.findOne({
+      user: payload.user.userId,
+      refreshToken: payload.refreshToken,
+    });
 
-//     attachCookiesToResponse({
-//       res,
-//       user: payload.user,
-//       refreshToken: existingToken.refreshToken,
-//     });
+    if (!existingToken || !existingToken?.isValid) {
+      throw new Error("Error");
+      // throw new CustomError.UnauthenticatedError('Authentication Invalid');
+    }
 
-//     req.user = payload.user;
-//     next();
-//   } catch (error) {
-//     throw new CustomError.UnauthenticatedError('Authentication Invalid');
-//   }
-// };
+    attachCookiesToResponse({
+      res,
+      user: payload.user,
+      refreshToken: existingToken.refreshToken,
+    });
 
-// const authorizePermissions = (...roles) => {
-//   return (req, res, next) => {
-//     if (!roles.includes(req.user.role)) {
-//       throw new CustomError.UnauthorizedError(
-//         'Unauthorized to access this route'
-//       );
-//     }
-//     next();
-//   };
-// };
+    req.user = payload.user;
+    next();
+  } catch (error) {
+    throw new Error("Error")
+    // throw new CustomError.UnauthenticatedError('Authentication Invalid');
+  }
+};
 
-// module.exports = {
-//   authenticateUser,
-//   authorizePermissions,
-// };
+const authorizePermissions = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      throw new Error("Error");
+      // throw new CustomError.UnauthorizedError(
+      //   'Unauthorized to access this route'
+      // );
+    }
+    next();
+  };
+};
+
+module.exports = {
+  authenticateUser,
+  authorizePermissions,
+};

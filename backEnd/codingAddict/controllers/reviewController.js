@@ -2,32 +2,36 @@ const Review = require('../models/Review');
 const Product = require('../models/Product');
 
 const { StatusCodes } = require('http-status-codes');
-const CustomError = require('../errors');
+// const CustomError = require('../errors');
 const { checkPermissions } = require('../utils');
 
 const createReview = async (req, res) => {
-  const { product: productId } = req.body;
 
-  const isValidProduct = await Product.findOne({ _id: productId });
+  console.log("Review", req);
+  // const { product: productId } = req.body;
 
-  if (!isValidProduct) {
-    throw new CustomError.NotFoundError(`No product with id : ${productId}`);
-  }
+  // const isValidProduct = await Product.findOne({ _id: productId });
 
-  const alreadySubmitted = await Review.findOne({
-    product: productId,
-    user: req.user.userId,
-  });
+  // if (!isValidProduct) {
+  //   throw new Error("Error");
+  //   // throw new CustomError.NotFoundError(`No product with id : ${productId}`);
+  // }
 
-  if (alreadySubmitted) {
-    throw new CustomError.BadRequestError(
-      'Already submitted review for this product'
-    );
-  }
+  // const alreadySubmitted = await Review.findOne({
+  //   product: productId,
+  //   user: req.user.userId,
+  // });
 
-  req.body.user = req.user.userId;
-  const review = await Review.create(req.body);
-  res.status(StatusCodes.CREATED).json({ review });
+  // if (alreadySubmitted) {
+  //   throw new Error("Error");
+  //   // throw new CustomError.BadRequestError(
+  //   //   'Already submitted review for this product'
+  //   // );
+  // }
+
+  // req.body.user = req.user.userId;
+  // const review = await Review.create(req.body);
+  // res.status(StatusCodes.CREATED).json({ review });
 };
 const getAllReviews = async (req, res) => {
   const reviews = await Review.find({}).populate({

@@ -21,7 +21,7 @@ const connectDB = require('./db/connect');
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
 const productRouter = require('./routes/productRoutes');
-// const reviewRouter = require('./routes/reviewRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 // const orderRouter = require('./routes/orderRoutes');
 
 // // middleware
@@ -49,7 +49,7 @@ app.use(express.json());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
-// app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/reviews', reviewRouter);
 // app.use('/api/v1/orders', orderRouter);
 
 // app.use(notFoundMiddleware);
