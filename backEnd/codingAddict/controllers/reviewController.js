@@ -8,30 +8,30 @@ const { checkPermissions } = require('../utils');
 const createReview = async (req, res) => {
 
   console.log("Review", req);
-  // const { product: productId } = req.body;
+  const { product: productId } = req.body;
 
-  // const isValidProduct = await Product.findOne({ _id: productId });
+  const isValidProduct = await Product.findOne({ _id: productId });
 
-  // if (!isValidProduct) {
-  //   throw new Error("Error");
-  //   // throw new CustomError.NotFoundError(`No product with id : ${productId}`);
-  // }
+  if (!isValidProduct) {
+    throw new Error("Error");
+    // throw new CustomError.NotFoundError(`No product with id : ${productId}`);
+  }
 
-  // const alreadySubmitted = await Review.findOne({
-  //   product: productId,
-  //   user: req.user.userId,
-  // });
+  const alreadySubmitted = await Review.findOne({
+    product: productId,
+    user: req.user.userId,
+  });
 
-  // if (alreadySubmitted) {
-  //   throw new Error("Error");
-  //   // throw new CustomError.BadRequestError(
-  //   //   'Already submitted review for this product'
-  //   // );
-  // }
+  if (alreadySubmitted) {
+    throw new Error("Error");
+    // throw new CustomError.BadRequestError(
+    //   'Already submitted review for this product'
+    // );
+  }
 
-  // req.body.user = req.user.userId;
-  // const review = await Review.create(req.body);
-  // res.status(StatusCodes.CREATED).json({ review });
+  req.body.user = req.user.userId;
+  const review = await Review.create(req.body);
+  res.status(StatusCodes.CREATED).json({ review });
 };
 const getAllReviews = async (req, res) => {
   const reviews = await Review.find({}).populate({

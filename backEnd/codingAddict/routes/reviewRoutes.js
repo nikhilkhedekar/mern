@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateUser } = require('../middleware/authentication');
+const { authenticateUser } = require('../middleware/full-auth');
 
 const {
   createReview,

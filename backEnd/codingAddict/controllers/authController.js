@@ -5,8 +5,8 @@ const { StatusCodes } = require('http-status-codes');
 const {
   attachCookiesToResponse,
   createTokenUser,
-  //   sendVerificationEmail,
-  //   sendResetPasswordEmail,
+    sendVerificationEmail,
+    sendResetPasswordEmail,
   createHash,
 } = require('../utils/index');
 const crypto = require('crypto');
@@ -34,7 +34,7 @@ const register = async (req, res) => {
     role,
     verificationToken,
   });
-  //   const origin = 'http://localhost:3000';
+    const origin = 'http://localhost:8080';
 
   // const newOrigin = 'https://react-node-user-workflow-front-end.netlify.app';
 
@@ -44,12 +44,12 @@ const register = async (req, res) => {
   // const forwardedHost = req.get('x-forwarded-host');
   // const forwardedProtocol = req.get('x-forwarded-proto');
 
-  //   await sendVerificationEmail({
-  //     name: user.name,
-  //     email: user.email,
-  //     verificationToken: user.verificationToken,
-  //     origin,
-  //   });
+    await sendVerificationEmail({
+      name: user.name,
+      email: user.email,
+      verificationToken: user.verificationToken,
+      origin,
+    });
 
   // send verification token back only while testing in postman!!!
   res.status(StatusCodes.CREATED).json({
@@ -97,7 +97,6 @@ const login = async (req, res) => {
   }
 
   const isPasswordCorrect = await user.comparePassword(password);
-  // const isPasswordCorrect = user.password === password ? true : false;
   if (!isPasswordCorrect) {
     throw new Error("isPasswordCorrectError");
     // throw new CustomError.UnauthenticatedError('Invalid Credentials');
@@ -153,7 +152,8 @@ const logout = async (req, res) => {
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
   if (!email) {
-    throw new CustomError.BadRequestError('Please provide valid email');
+    throw new Error("Error");
+    // throw new CustomError.BadRequestError('Please provide valid email');
   }
 
   const user = await User.findOne({ email });
@@ -184,7 +184,8 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body;
   if (!token || !email || !password) {
-    throw new CustomError.BadRequestError('Please provide all values');
+    throw new Error("Error");
+    // throw new CustomError.BadRequestError('Please provide all values');
   }
   const user = await User.findOne({ email });
 
@@ -192,13 +193,13 @@ const resetPassword = async (req, res) => {
     const currentDate = new Date();
 
     if (
-      user.passwordToken === createHash(token) &&
+      user.passwordToken === token &&
       user.passwordTokenExpirationDate > currentDate
-    ) {
+    ) {      
       user.password = password;
       user.passwordToken = null;
       user.passwordTokenExpirationDate = null;
-      await user.save();
+      user.save();
     }
   }
 

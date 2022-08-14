@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   authenticateUser,
   authorizePermissions,
-} = require('../middleware/authentication');
+} = require('../middleware/full-auth');
 
 const {
   getAllOrders,
@@ -15,8 +15,12 @@ const {
 
 router
   .route('/')
-  .post(authenticateUser, createOrder)
-  .get(authenticateUser, authorizePermissions('admin'), getAllOrders);
+  .post(
+    authenticateUser, 
+    createOrder)
+  .get(
+    authenticateUser, authorizePermissions('admin'), 
+    getAllOrders);
 
 router.route('/showAllMyOrders').get(authenticateUser, getCurrentUserOrders);
 

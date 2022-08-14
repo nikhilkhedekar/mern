@@ -3,37 +3,41 @@ const crypto = require("crypto");
 
 const createJWT = ({ payload }) => {
   const JWT_SECRET = "q4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D";
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30" });
+  const token = jwt.sign(payload, JWT_SECRET);
   return token;
 };
 
 const isTokenValid = (token) => {
-  const JWT_SECRET = crypto.randomBytes(64).toString("hex");
-  jwt.verify(token, JWT_SECRET)
+  console.log("token", token);
+  const JWT_SECRET = "q4t7w!z%C*F-JaNdRgUkXp2r5u8x/A?D";
+  const resp = jwt.verify(token, JWT_SECRET)
+  console.log("jwtResp", resp);
+  return resp;
 };
 
 const attachCookiesToResponse = ({ res, user, refreshToken }) => {
   const accessTokenJWT = createJWT({ payload: { user } });
   const refreshTokenJWT = createJWT({ payload: { user, refreshToken } });
 
+  console.log("accessTokenJWT", accessTokenJWT);
   const oneDay = 1000 * 60 * 60 * 24;
   const longerExp = 1000 * 60 * 60 * 24 * 30;
 
   const NODE_ENV = "development";
 
-  // res.cookie('accessToken', accessTokenJWT, {
-  //   httpOnly: true,
-  //   secure: NODE_ENV === 'development',
-  //   signed: true,
-  //   expires: new Date(Date.now() + oneDay),
-  // });
+  res.cookie('accessToken', accessTokenJWT, {
+    httpOnly: true,
+    secure: NODE_ENV === 'development',
+    signed: true,
+    expires: new Date(Date.now() + oneDay),
+  });
 
-  // res.cookie('refreshToken', refreshTokenJWT, {
-  //   httpOnly: true,
-  //   secure: NODE_ENV === 'development',
-  //   signed: true,
-  //   expires: new Date(Date.now() + longerExp),
-  // });
+  res.cookie('refreshToken', refreshTokenJWT, {
+    httpOnly: true,
+    secure: NODE_ENV === 'development',
+    signed: true,
+    expires: new Date(Date.now() + longerExp),
+  });
 };
 // const attachSingleCookieToResponse = ({ res, user }) => {
 //   const token = createJWT({ payload: user });

@@ -3,8 +3,9 @@ const { isTokenValid, attachCookiesToResponse } = require('../utils/index');
 const Token = require('../models/Token');
 
 const authenticateUser = async (req, res, next) => {
-  const { refreshToken, accessToken } = req.signedCookies;
-
+  const { getRefreshToken, getAccessToken } = req.signedCookies;
+  const refreshToken = decodeURIComponent(getRefreshToken), accessToken = decodeURIComponent(getAccessToken); 
+  console.log("cookie", req);
   try {
     if (accessToken) {
       const payload = isTokenValid(accessToken);

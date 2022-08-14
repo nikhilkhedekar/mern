@@ -1,4 +1,5 @@
 const postData = require('../schema/schema');
+const jwt = require('jsonwebtoken');
 
 exports.homePage = (req, res) => {
     res.send('listening on 8080');
@@ -7,8 +8,15 @@ exports.homePage = (req, res) => {
 exports.postUserDetails = (req, res) => {
     const postedData = new postData(req.body);
     console.log('postedData', postedData);
-    res.status(201).json({
+    const message = {
         status: 'successful',
-        payload: postedData, 
-    });
+        payload: postedData,
+    }
+    const secret = jwt.sign({user: "me"}, "secret");
+    res.cookie("secret", secret, {
+        httpOnly: true,
+        secure: true,
+        signed: true,
+    })
+    res.json({secret})
 }

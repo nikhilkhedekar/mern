@@ -50,15 +50,14 @@ const updateUser = async (req, res) => {
 const updateUserPassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     if (!oldPassword || !newPassword) {
-        throw new Error("Error")
+        throw new Error("provide both values")
         // throw new CustomError.BadRequestError('Please provide both values');
     }
-    const user = await User.findOne({ _id: req.user.userId });
-
+    const user = await User.findOne({ _id: req.user.userId });    
     const isPasswordCorrect = await user.comparePassword(oldPassword);
     if (!isPasswordCorrect) {
         // throw new CustomError.UnauthenticatedError('Invalid Credentials');
-        throw new Error("Error")
+        throw new Error("Invalid Credentials")
     }
     user.password = newPassword;
 
