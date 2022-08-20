@@ -55,6 +55,20 @@ const deleteProduct = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Success! Product removed.' });
 };
 const uploadImage = async (req, res) => {
+
+  // const path = require("path");
+  //   const os = require("os");
+  //   const fs = require("fs");
+
+  //   const mimeType = req.headers['content-type'];    
+  //   let fileExtension = mimeType.slice(6);
+  //   let imageFileName = `${Math.random()}.${fileExtension}`;
+  //   const filePath = path.join(os.tmpdir(),
+  //         imageFileName
+  //   );
+  //   console.log("filePath", filePath);
+  //   file.pipe(fs.createWriteStream(filepath));
+
   if (!req.files) {
     throw new Error({ message: "Error" })
     // throw new CustomError.BadRequestError('No File Uploaded');

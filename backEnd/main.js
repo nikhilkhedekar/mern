@@ -1,3 +1,3 @@
-const App = require('./codingAddict/app');
+const App = require('./graphQL/netNinja/app');
 
 App.app;

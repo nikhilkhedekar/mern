@@ -27,16 +27,16 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
 
   res.cookie('accessToken', accessTokenJWT, {
     httpOnly: true,
-    secure: NODE_ENV === 'development',
-    signed: true,
-    expires: new Date(Date.now() + oneDay),
+    // secure: NODE_ENV === 'development',
+    // signed: true,
+    // expires: new Date(Date.now() + oneDay),
   });
 
   res.cookie('refreshToken', refreshTokenJWT, {
     httpOnly: true,
-    secure: NODE_ENV === 'development',
-    signed: true,
-    expires: new Date(Date.now() + longerExp),
+    // secure: NODE_ENV === 'development',
+    // signed: true,
+    // expires: new Date(Date.now() + longerExp),
   });
 };
 // const attachSingleCookieToResponse = ({ res, user }) => {
