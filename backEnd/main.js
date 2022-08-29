@@ -1,3 +1,3 @@
-const App = require('./graphQL/netNinja/app');
+const App = require('./socketIO/kimChen/app');
 
-App.app;
+App.app
