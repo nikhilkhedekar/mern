@@ -1,16 +1,36 @@
-import React from 'react';
+//All other projects
+// import React from 'react';
+// import ReactDOM from 'react-dom/client';
+
+// import App from './graphQL/stephenGrinder/songLyric/App';
+
+
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render(
+
+//     <App />
+
+// );
+
+//stripe ryanDhungel
+import React from "react";
 import ReactDOM from 'react-dom/client';
-
-import App from './nodeBasics/app';
-
+import "./stripe/ryanDhungel/index.css";
+import App from "./stripe/ryanDhungel/App";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+root.render(<App />);
 
-    <App />
+//socketIo kimChen
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+// import './sockerIO/kimChen/index.css';
+// import App from './sockerIO/kimChen/App';
 
-);
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+// root.render( <App /> );
 
+//codingAddict
 // import React from 'react';
 // import ReactDOM from 'react-dom/client';
 // import './codingAddict/index.css';

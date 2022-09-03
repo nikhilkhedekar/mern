@@ -1,43 +1,109 @@
-const expressApp = require("express")();
-const http = require("http").createServer(expressApp);
-const { Server } = require("socket.io");
-// const { instrument } = require("@socket.io/admin-ui"); 
+const express = require('express');
+const app = express();
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
+const http = require('http').createServer(app);
+const mongoose = require("mongoose")
+const { Server } = require('socket.io')
+const { addUser, getUser, removeUser } = require('./helper');
+const Message = require('./models/Message');
+const Room = require('./models/Room');
+const authRoutes = require('./routes/authRoutes');
+const { instrument } = require("@socket.io/admin-ui");
 
-const app = new Server(http, {
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200 // For legacy browser support
+}
+const PORT = 8080;
+
+const mongoDB = "mongodb+srv://Dhungel:Dhungel@awsdhungel.oevqe.mongodb.net/AWSDhungel?retryWrites=true&w=majority";
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
+app.use(authRoutes);
+
+mongoose.connect(mongoDB);
+
+// app.get('/set-cookies', (req, res) => {
+//     res.cookie('username', 'Tony');
+//     res.cookie('isAuthenticated', true, { maxAge: 24 * 60 * 60 * 1000 });
+//     res.send('cookies are set');
+// })
+// app.get('/get-cookies', (req, res) => {
+//     const cookies = req.cookies;
+//     console.log(cookies);
+//     res.json(cookies);
+// })
+
+const io = new Server(http, {
     cors: {
-        origin: "*",
+        origin: "*"
     }
-});
-
-//broadcast.emit sends data to all sockets except source
-//volatile.emit asynchronous in nature
-//.join("room");
-//.to("room").emit
-const firstConnection = app.of("/", () => {
-    console.log("firstSocketConnection", socket);
-});
-firstConnection.on("firstSocketConnection", socket => {
-    console.log("firstSocketConnected", socket.connected)
-});
-firstConnection.use((socket, next) => {
-    console.log("firstSocketConnectionId", socket.id);
-});
-
-const secondSocketConnection = app.of("/second", () => {
-    console.log("secondSocketConnection", socket);
 })
-secondSocketConnection.on("secondSocketConnection", socket => {
-    console.log("secondSocketConnection", socket.connected)
-});
-secondSocketConnection.use((socket, next) => {
-    console.log("secondSocketConnection", socket.id);
+
+io.on('connection', (socket) => {
+    console.log(socket.id);
+    Room.find().then(result => {
+        socket.emit('output-rooms', result);
+    });
+
+    //create room
+    socket.on('create-room', name => {
+        console.log('Then room name received is ', name)
+        const room = new Room({ name });
+        room.save().then(result => {
+            io.emit('room-created', result)
+        })
+    });
+    socket.on('join', ({ name, room_id, user_id }) => {
+        // const { error, user } = 
+        addUser({
+            socket_id: socket.id,
+            name,
+            room_id,
+            user_id
+        })
+        socket.join(room_id);
+        // if (error) {
+        //     console.log('join error', error)
+        // } else {
+        //     console.log('join user', user)
+        // }
+    })
+
+    //send message
+    socket.on('sendMessage', (message, room_id, callback) => {
+        const user = getUser(socket.id);
+        const msgToStore = {
+            name: user.name,
+            user_id: user.user_id,
+            room_id,
+            text: message
+        }
+        console.log('message', msgToStore)
+        const msg = new Message(msgToStore);
+        msg.save().then(result => {
+            console.log("msg", result);
+            io.to(room_id).emit('message', result);
+            callback()
+        })
+    });
+
+    socket.on('get-messages-history', room_id => {
+        Message.find({ room_id }).then(result => {
+            socket.emit('output-messages', result)
+        })
+    })
+    socket.on('disconnect', () => {
+        const user = removeUser(socket.id);
+    })
 });
 
-http.listen(8080, () => {
-    console.log("listening 8080");
+instrument(io, { auth: false })
+
+http.listen(PORT, () => {
+    console.log(`listening on port ${PORT}`);
 });
-
-// const instru = instrument(app, { auth: false})
-// console.log("instru", instru);
-
-module.exports = app;

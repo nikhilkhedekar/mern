@@ -27,8 +27,8 @@ const orderRouter = require('./routes/orderRoutes');
 
 //swagger
 const swaggerUI = require('swagger-ui-express');
-// const YAML = require('yamljs');
-// const swaggerDoc = YAML.load('./api/swaggerApi.yaml');
+const YAML = require('yamljs');
+const swaggerDoc = YAML.load('./codingAddict/api/swaggerCodingAddictApi.yaml');
 // const YAML = require('js-yaml');
 // const fs   = require('fs');
 // const swaggerDoc = YAML.load(fs.readFileSync('./api/swaggerApi.yaml'))
@@ -61,9 +61,9 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/orders', orderRouter);
-// app.use('/swagger-api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+app.use('/swagger-api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 // app.use('/swagger-api-docs', swaggerUI.serveFiles('./api/openapi.json'), swaggerUI.setup('./api/openapi.json'));
-app.use('/swagger-api-docs', swaggerUI.serve, swaggerUI.setup('./api/openapi.json'));
+// app.use('/swagger-api-docs', swaggerUI.serve, swaggerUI.setup('./api/openapi.json'));
 
 // app.use(notFoundMiddleware);
 // app.use(errorHandlerMiddleware);

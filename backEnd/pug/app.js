@@ -1,10 +1,11 @@
 const express = require("express");
 const path = require("path");
 const pug = require("pug");
+const os = require("os");
 
 const app = express();
 
-app.set("view engine", pug);
+app.set("view engine", "pug");
 app.set("veiws", path.join(__dirname, "views"));
 app.use(express.json());
 

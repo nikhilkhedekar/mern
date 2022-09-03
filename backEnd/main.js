@@ -1,3 +1,3 @@
-const App = require('./socketIO/kimChen/app');
+const App = require('./stripe/ryanDhungel/server');
 
-App.app
+App.app;
