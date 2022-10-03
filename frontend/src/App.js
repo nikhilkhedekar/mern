@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import FileBase64 from 'react-file-base64';
+// import FileBase64 from 'react-file-base64';
 
 const App = () => {
   const [userDetails, setUserDetails] = useState({
@@ -28,22 +28,26 @@ const App = () => {
   }, [])
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    const postData = {
-      userName,
-      userEmail,
-      contactNo,
-      image: imageFile,
-    }
-    console.log("postData", postData);
-    const postResp = axios.post('http://localhost:8080/postData', postData);
+    // const postData = {
+    //   userName,
+    //   userEmail,
+    //   contactNo,
+    //   image: imageFile,
+    // }
+    // console.log("postData", postData);
+    const postResp = axios.post('http://localhost:8080/uploadImage', imageFile);
     console.log('postedData', postResp)
   }
   return(
     <form onSubmit={onSubmitHandler} >
-      <input onChange={onChangeHanlder('userName')} value={userName} />
+      {/* <input onChange={onChangeHanlder('userName')} value={userName} />
       <input onChange={onChangeHanlder('userEmail')} value={userEmail} />
-      <input onChange={onChangeHanlder('contactNo')} value={contactNo} type="number"/>
-      <FileBase64 multiple={true} onDone={(base64) => setImageFile(base64)} />
+      <input onChange={onChangeHanlder('contactNo')} value={contactNo} type="number"/> */}
+      {/* <FileBase64 multiple={true} onDone={(base64) => setImageFile(base64)} /> */}
+      <input type={"file"} onChange={(e) => {
+        setImageFile(e.target.files[0]);
+        console.log("imageFile", imageFile)
+      }} />
       <button type='submit' >Submit</button>
     </form>
   )

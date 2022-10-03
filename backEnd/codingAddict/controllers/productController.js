@@ -55,46 +55,29 @@ const deleteProduct = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Success! Product removed.' });
 };
 const uploadImage = async (req, res) => {
+  // if (!req.files) {
+  //   throw new CustomError.BadRequestError('No File Uploaded');
+  // }
+  // const productImage = req.files.image;
 
-  // const path = require("path");
-  //   const os = require("os");
-  //   const fs = require("fs");
+  // if (!productImage.mimetype.startsWith('image')) {
+  //   throw new CustomError.BadRequestError('Please Upload Image');
+  // }
 
-  //   const mimeType = req.headers['content-type'];    
-  //   let fileExtension = mimeType.slice(6);
-  //   let imageFileName = `${Math.random()}.${fileExtension}`;
-  //   const filePath = path.join(os.tmpdir(),
-  //         imageFileName
+  // const maxSize = 1024 * 1024;
+
+  // if (productImage.size > maxSize) {
+  //   throw new CustomError.BadRequestError(
+  //     'Please upload image smaller than 1MB'
   //   );
-  //   console.log("filePath", filePath);
-  //   file.pipe(fs.createWriteStream(filepath));
+  // }
 
-  if (!req.files) {
-    throw new Error({ message: "Error" })
-    // throw new CustomError.BadRequestError('No File Uploaded');
-  }
-  const productImage = req.files.image;
-
-  if (!productImage.mimetype.startsWith('image')) {
-    throw new Error({ message: "Error" })
-    // throw new CustomError.BadRequestError('Please Upload Image');
-  }
-
-  const maxSize = 1024 * 1024;
-
-  if (productImage.size > maxSize) {
-    throw new Error({ message: "Error" })
-    // throw new CustomError.BadRequestError(
-    //   'Please upload image smaller than 1MB'
-    // );
-  }
-
-  const imagePath = path.join(
-    __dirname,
-    '../public/uploads/' + `${productImage.name}`
-  );
-  await productImage.mv(imagePath);
-  res.status(StatusCodes.OK).json({ image: `/uploads/${productImage.name}` });
+  // const imagePath = path.join(
+  //   __dirname,
+  //   '../public/uploads/' + `${productImage.name}`
+  // );
+  // await productImage.mv(imagePath);
+  // res.status(StatusCodes.OK).json({ image: `/uploads/${productImage.name}` });
 };
 
 module.exports = {
