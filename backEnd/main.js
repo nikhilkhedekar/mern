@@ -1,3 +1,3 @@
-const App = require('./stripe/ryanDhungel/server');
+const App = require('./paymentGateway/stripe/ryanDhungel/server');
 
 App.app;
